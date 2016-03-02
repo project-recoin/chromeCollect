@@ -6,20 +6,52 @@ function performForm(){
 	var task_id = document.getElementById('task_id').value;
 	var project_id = document.getElementById('project_id').value;
 
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://recoin.cloudapp.net:3215/RecoinPyBossaRestTaskCollector/sendTaskRun?text="+resp_text+"&task_id="+task_id+"&project_id="+project_id+"&contributor_name=chromeextension&source=restful", true);
-    xhr.onreadystatechange = function() {
-    	if (xhr.readyState == 4) {
-        	var resp = JSON.parse(xhr.responseText);
-        	chrome.extension.getBackgroundPage().console.log(resp);
-        	chrome.storage.sync.set({'performedId': {'task_id':task_id}},function (object) {
-	            chrome.extension.getBackgroundPage().console.log('saved new latest performed task');
-	            chrome.extension.getBackgroundPage().console.log(object);
-	            window.close();
-	        });
+    getMyLocalIP(function(ip_array) { 
+
+    	var xhr = new XMLHttpRequest();
+    	//var ip = ip_array.join('-');
+        var ip = ip_array[0];
+        xhr.open("GET", "http://recoin.cloudapp.net:3215/RecoinPyBossaRestTaskCollector/sendTaskRun?text="+resp_text+"&task_id="+task_id+"&project_id="+project_id+"&contributor_name="+ip+"&source=chromeextension", true);
+        xhr.onreadystatechange = function() {
+        	if (xhr.readyState == 4) {
+            	var resp = JSON.parse(xhr.responseText);
+            	chrome.extension.getBackgroundPage().console.log(resp);
+            	chrome.storage.sync.set({'performedId': {'task_id':task_id}},function (object) {
+    	            chrome.extension.getBackgroundPage().console.log('saved new latest performed task');
+    	            chrome.extension.getBackgroundPage().console.log(object);
+    	            window.close();
+    	        });
+            }
         }
-    }
-    xhr.send();
+        xhr.send();
+    });
+}
+
+function getMyLocalIP(mCallback) {
+    var all_ip = [];
+
+    var RTCPeerConnection = window.RTCPeerConnection ||
+        window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
+
+    var pc = new RTCPeerConnection({
+         iceServers: []
+    });
+
+    pc.createDataChannel('');
+
+    pc.onicecandidate = function(e) {
+
+        if (!e.candidate) {
+           mCallback(all_ip);
+            return;
+        }
+        var ip = /^candidate:.+ (\S+) \d+ typ/.exec(e.candidate.candidate)[1];
+        if (all_ip.indexOf(ip) == -1)
+            all_ip.push(ip);
+    };
+    pc.createOffer(function(sdp) {
+        pc.setLocalDescription(sdp);
+    }, function onerror() {});
 }
 
 chrome.storage.sync.get('lastId',function (object) {
