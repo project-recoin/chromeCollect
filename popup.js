@@ -24,6 +24,9 @@ function performForm(){
 
 chrome.storage.sync.get('lastId',function (object) {
   chrome.storage.sync.get('performedId',function (obj) {
+    
+    chrome.extension.getBackgroundPage().console.log(object.lastId);
+    
   	if(obj.performedId == undefined || obj.performedId.task_id < object.lastId.task_id){
 		document.getElementById('question').textContent = object.lastId.question;
 		document.getElementById('content').textContent = object.lastId.task_text;
@@ -40,6 +43,7 @@ window.addEventListener('load', function(evt) {
     // Cache a reference to the status display SPAN
     //statusDisplay = document.getElementById('status-display');
     // Handle the bookmark form submit event with our addBookmark function
+
     document.getElementById('performform').addEventListener('submit', performForm);
     // Get the event page
     //chrome.runtime.getBackgroundPage(function(eventPage) {
