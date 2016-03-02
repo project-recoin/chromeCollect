@@ -14,7 +14,7 @@ function performForm(){
         	chrome.extension.getBackgroundPage().console.log(resp);
         	chrome.storage.sync.set({'performedId': {'task_id':task_id}},function (object) {
 	            chrome.extension.getBackgroundPage().console.log('saved new latest performed task');
-	            chrome.extension.getBackgroundPage().console.log(resp.task_id);
+	            chrome.extension.getBackgroundPage().console.log(object.task_id);
 	            window.close();
 	        });
         }
