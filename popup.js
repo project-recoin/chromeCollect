@@ -7,7 +7,7 @@ function performForm(){
 	var project_id = document.getElementById('project_id').value;
 
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://recoin.cloudapp.net:3215/RecoinPyBossaRestTaskCollector/sendTaskRun?text="+resp_text+"&task_id="+task_id+"&project_id="+project_id+"&contributor_name=saud&source=restful", true);
+	xhr.open("GET", "http://recoin.cloudapp.net:3215/RecoinPyBossaRestTaskCollector/sendTaskRun?text="+resp_text+"&task_id="+task_id+"&project_id="+project_id+"&contributor_name=chromeextension&source=restful", true);
     xhr.onreadystatechange = function() {
     	if (xhr.readyState == 4) {
         	var resp = JSON.parse(xhr.responseText);
@@ -24,7 +24,7 @@ function performForm(){
 
 chrome.storage.sync.get('lastId',function (object) {
   chrome.storage.sync.get('performedId',function (obj) {
-    
+
     chrome.extension.getBackgroundPage().console.log(object.lastId);
     
   	if(obj.performedId == undefined || obj.performedId.task_id < object.lastId.task_id){
