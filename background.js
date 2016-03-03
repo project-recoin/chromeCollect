@@ -13,7 +13,7 @@ function notifyMe() {
     });
 
     notification.onclick = function () {
-      window.open("http://sociam.org");      
+      window.open("https://twitter.com/RECOIN_val");      
     };
   }
   setTimeout(notification.close.bind(notification), 1000);
