@@ -60,7 +60,7 @@ chrome.storage.sync.get('lastId',function (object) {
     chrome.extension.getBackgroundPage().console.log(object.lastId);
     
   	if(obj.performedId == undefined || obj.performedId.task_id < object.lastId.task_id){
-		document.getElementById('question').textContent = object.lastId.question;
+		document.getElementById('question').textContent = object.lastId.question.replace("?"," ") + object.lastId.hashtags.join(' ') + "?";
 		document.getElementById('content').textContent = object.lastId.task_text;
 		document.getElementById('task_id').value = object.lastId.task_id;
 		document.getElementById('project_id').value = object.lastId.project_id;
